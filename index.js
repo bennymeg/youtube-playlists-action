@@ -1,15 +1,17 @@
-import { getInput, setOutput, setFailed } from '@actions/core';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { getPlaylists, getPlaylistItems } from './src/api';
+const core = require('@actions/core');
+const mkdir = require('fs').promises.writeFile;
+const writeFile = require('fs').promises.writeFile;
+const join = require('path').join;
+const getPlaylists = require('./src/api').getPlaylists;
+const getPlaylistItems = require('./src/api').getPlaylistItems;
 
 async function workflow() {
     try {
-        const channelId = getInput('channel-id');
-        const playlistParts = getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
-        const videoParts = getInput('video-parts');             // contentDetails, id, snippet, status
-        const maxResults = getInput('max-results');             // 0 - 50, default: 5
-        const outputPath = getInput('path');                    // output path
+        const channelId = core.getInput('channel-id');
+        const playlistParts = core.getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
+        const videoParts = core.getInput('video-parts');             // contentDetails, id, snippet, status
+        const maxResults = core.getInput('max-results');             // 0 - 50, default: 5
+        const outputPath = core.getInput('path');                    // output path
 
         await mkdir(outputPath, { recursive: true });
     
@@ -33,7 +35,7 @@ async function workflow() {
             });
         }
     } catch (error) {
-        setFailed(error.message);
+        core.setFailed(error.message);
     }
 }
 

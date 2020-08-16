@@ -11,7 +11,7 @@ const playlistItemParts = "contentDetails, id, snippet, status";
  * @param {string} maxResults max number of playlists to retrive [0:50]. Default=20.
  * @returns {playlistListResponse} channel playlists list
  */
-export async function getPlaylists(channelId, parts=playlistParts, maxResults=20) {
+async function getPlaylists(channelId, parts=playlistParts, maxResults=20) {
     let playlists;
 
     try {
@@ -31,7 +31,7 @@ export async function getPlaylists(channelId, parts=playlistParts, maxResults=20
  * @param {string} maxResults max number of playlists to retrive [0:50]. Default=20.
  * @returns {playlistItemListResponse} playlist items list
  */
-export async function getPlaylistItems(playlistId, parts=playlistItemParts, maxResults=20) {
+async function getPlaylistItems(playlistId, parts=playlistItemParts, maxResults=20) {
     let playlistItems;
 
     try {
@@ -42,3 +42,5 @@ export async function getPlaylistItems(playlistId, parts=playlistItemParts, maxR
 
     return playlistItems;
 }
+
+module.exports = { getPlaylists, getPlaylistItems };
