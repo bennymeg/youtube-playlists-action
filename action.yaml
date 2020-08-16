@@ -1,0 +1,21 @@
+name: 'Youtube Playlists Retriever'
+description: 'Retrieve all the selected youtube channel playlists includind their content data'
+inputs:
+  channel-id:
+    description: 'Youtube channel id'
+    required: true
+  playlist-parts:
+    description: 'Youtube channel playlist parts to retrive'
+    required: true
+    default: 'contentDetails, id, localizations, player, snippet, status'
+  video-parts:
+    description: 'Youtube channel playlist items parts to retrive'
+    required: true
+    default: 'contentDetails, id, snippet, status'
+  max-results:
+    description: 'Max number of playlists to retrive [0:50]'
+    required: true
+    default: 20
+runs:
+  using: 'node12'
+  main: 'index.js'
