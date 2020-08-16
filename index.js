@@ -1,5 +1,6 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
-import { writeFile } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 import { getPlaylists, getPlaylistItems } from './src/api';
 
 async function workflow() {
@@ -8,12 +9,15 @@ async function workflow() {
         const playlistParts = getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
         const videoParts = getInput('video-parts');             // contentDetails, id, snippet, status
         const maxResults = getInput('max-results');             // 0 - 50, default: 5
+        const outputPath = getInput('path');                    // output path
+
+        await mkdir(outputPath, { recursive: true });
     
         const playlists = await getPlaylists(channelId, playlistParts, maxResults);
 
         if (playlists && playlists.items.length > 0) {
             // save playlist to file
-            writeFile('playlists.json', playlists)
+            writeFile(join(outputPath, 'playlists.json'), playlists)
                 .then(console.log(`Playlists index file has been updated!`))
                 .catch(error => console.error(error));
 
@@ -22,7 +26,7 @@ async function workflow() {
                 
                 // save playlist items to file
                 if (items) {
-                    writeFile(`${playlist.id}.json`, items)
+                    writeFile(join(outputPath, `${playlist.id}.json`), items)
                         .then(console.log(`${playlist.id} playlist file has been updated!`))
                         .catch(error => console.error(error));
                 }

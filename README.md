@@ -20,6 +20,10 @@ This action fetch's all youtube channel playlists with their corresponding video
 
 **Optional** Query max results. Default=20.
 
+### `path`
+
+**Optional** Output path. Default='wiki'.
+
 ## Example usage
 
 ```
