@@ -8,7 +8,7 @@ This action fetch's all youtube channel playlists with their corresponding video
 
 **Required** Youtube channel id.
 
-### `apiKey`
+### `api-key`
 
 **Required** Youtube V3 API key.
 

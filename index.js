@@ -7,7 +7,7 @@ const getPlaylistItems = require('./src/api').getPlaylistItems;
 async function workflow() {
     try {
         const channelId = core.getInput('channel-id');
-        const key = core.getInput('apiKey');
+        const key = core.getInput('api-key');
         const playlistParts = core.getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
         const videoParts = core.getInput('video-parts');             // contentDetails, id, snippet, status
         const maxResults = core.getInput('max-results');             // 0 - 50, default: 5

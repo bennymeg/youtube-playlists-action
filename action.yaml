@@ -4,7 +4,7 @@ inputs:
   channel-id:
     description: 'Youtube channel id'
     required: true
-  apiKey:
+  api-key:
     description: 'Youtube API key'
     required: true
   playlist-parts:
