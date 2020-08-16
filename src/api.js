@@ -7,15 +7,16 @@ const playlistItemParts = "contentDetails, id, snippet, status";
  * Gets a specific youtube channel playlists list.
  *
  * @param {string} channelId youtube channel id.
+ * @param {string} key youtube api key.
  * @param {string} parts playlists parts to retrive. Default=all.
  * @param {string} maxResults max number of playlists to retrive [0:50]. Default=20.
  * @returns {playlistListResponse} channel playlists list
  */
-async function getPlaylists(channelId, parts=playlistParts, maxResults=20) {
+async function getPlaylists(channelId, key, parts=playlistParts, maxResults=20) {
     let playlists;
 
     try {
-        playlists = await service.playlists.list({ channelId, part: parts, maxResults });
+        playlists = await service.playlists.list({ channelId, key, part: parts, maxResults });
     } catch (error) {
         console.log('The API returned an error: ' + error);
     }
@@ -27,15 +28,16 @@ async function getPlaylists(channelId, parts=playlistParts, maxResults=20) {
  * Gets a specific youtube channel playlist items.
  *
  * @param {string} playlistId youtube playlist id.
+ * @param {string} key youtube api key.
  * @param {string} parts playlists parts to retrive. Default=all.
  * @param {string} maxResults max number of playlists to retrive [0:50]. Default=20.
  * @returns {playlistItemListResponse} playlist items list
  */
-async function getPlaylistItems(playlistId, parts=playlistItemParts, maxResults=20) {
+async function getPlaylistItems(playlistId, key, parts=playlistItemParts, maxResults=20) {
     let playlistItems;
 
     try {
-        playlistItems = await service.playlistItems.list({ playlistId, part: parts, maxResults });
+        playlistItems = await service.playlistItems.list({ playlistId, key, part: parts, maxResults });
     } catch (error) {
         console.log('The API returned an error: ' + error);
     }

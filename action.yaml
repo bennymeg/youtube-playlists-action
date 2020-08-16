@@ -4,6 +4,9 @@ inputs:
   channel-id:
     description: 'Youtube channel id'
     required: true
+  apiKey:
+    description: 'Youtube API key'
+    required: true
   playlist-parts:
     description: 'Youtube channel playlist parts to retrive'
     required: false
@@ -16,10 +19,6 @@ inputs:
     description: 'Max number of playlists to retrive [0:50]'
     required: false
     default: 20
-  path:
-    description: 'Output path'
-    required: false
-    default: 'wiki'
 runs:
   using: 'node12'
   main: 'index.js'

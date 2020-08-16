@@ -1,12 +1,16 @@
 # Youtube playlists action
 
-This action fetch's all youtube channel playlists with their corresponding video's data.
+This action fetch's all youtube channel playlists with their corresponding video's data into the `docs` directory.
 
 ## Inputs
 
 ### `channel-id`
 
 **Required** Youtube channel id.
+
+### `apiKey`
+
+**Required** Youtube V3 API key.
 
 ### `playlist-parts`
 
@@ -19,10 +23,6 @@ This action fetch's all youtube channel playlists with their corresponding video
 ### `maxResults`
 
 **Optional** Query max results. Default=20.
-
-### `path`
-
-**Optional** Output path. Default='wiki'.
 
 ## Example usage
 
