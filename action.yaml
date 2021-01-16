@@ -19,6 +19,10 @@ inputs:
     description: 'Max number of playlists to retrive [0:50]'
     required: false
     default: 20
+  output-directory:
+    description: 'Resources output directory'
+    required: false
+    default: 'docs'
 runs:
   using: 'node12'
   main: 'index.js'

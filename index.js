@@ -13,19 +13,20 @@ async function workflow() {
         const playlistParts = core.getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
         const videoParts = core.getInput('video-parts');             // contentDetails, id, snippet, status
         const maxResults = core.getInput('max-results');             // 0 - 50, default: 5
+        const outpurDir = core.getInput('output-directory');         // default: 'docs'
 
         const currentPlaylists = await getPlaylists(channelId, key, playlistParts, maxResults);
         let previousPlaylists;
 
         if (currentPlaylists && currentPlaylists.data.items.length > 0) {
             // read previous playlists toc
-            await readFile(join('docs', 'toc.json'))
+            await readFile(join(outpurDir, 'toc.json'))
                 .then(toc => prevPlaylists = toc)
                 .catch(error => console.error(error));
 
             if (currentPlaylists !== previousPlaylists) {
                 // update playlists toc to file
-                await writeFile(join('docs', 'toc.json'), JSON.stringify(currentPlaylists.data))
+                await writeFile(join(outpurDir, 'toc.json'), JSON.stringify(currentPlaylists.data))
                     .then(console.log(`Playlists table of contents file has been ${prevPlaylists ? 'updated' : 'added'}!`))
                     .catch(error => console.error(error));
 
@@ -41,7 +42,7 @@ async function workflow() {
                     
                     // save playlist items to file
                     if (items) {
-                        writeFile(join('docs', `${id}.json`), JSON.stringify(items.data))
+                        writeFile(join(outpurDir, `${id}.json`), JSON.stringify(items.data))
                             .then(console.log(`${id} playlist file has been added!`))
                             .catch(error => console.error(error));
                     }
@@ -52,7 +53,7 @@ async function workflow() {
                     
                     // update playlist items file
                     if (items) {
-                        writeFile(join('docs', `${id}.json`), JSON.stringify(items.data))
+                        writeFile(join(outpurDir, `${id}.json`), JSON.stringify(items.data))
                             .then(console.log(`${id} playlist file has been updated!`))
                             .catch(error => console.error(error));
                     }
@@ -61,7 +62,7 @@ async function workflow() {
                 removedPlaylistsIds.forEach(async (id) => {
                     // remove playlist items file
                     if (items) {
-                        removeFile(join('docs', `${id}.json`))
+                        removeFile(join(outpurDir, `${id}.json`))
                             .then(console.log(`${id} playlist file has been removed!`))
                             .catch(error => console.error(error));
                     }
