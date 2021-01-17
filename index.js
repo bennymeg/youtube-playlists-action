@@ -1,3 +1,4 @@
+const env = require('dotenv').config();
 const core = require('@actions/core');
 const readFile = require('fs').promises.readFile;
 const writeFile = require('fs').promises.writeFile;
@@ -8,12 +9,12 @@ const getPlaylistItems = require('./src/api').getPlaylistItems;
 
 async function workflow() {
     try {
-        const channelId = core.getInput('channel-id');
-        const key = core.getInput('api-key');
-        const playlistParts = core.getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
-        const videoParts = core.getInput('video-parts');             // contentDetails, id, snippet, status
-        const maxResults = core.getInput('max-results');             // 0 - 50, default: 5
-        const outpurDir = core.getInput('output-directory');         // default: 'docs'
+        const channelId = getInput('channel-id');
+        const key = getInput('api-key');
+        const playlistParts = getInput('playlist-parts');       // contentDetails, id, localizations, player, snippet, status
+        const videoParts = getInput('video-parts');             // contentDetails, id, snippet, status
+        const maxResults = getInput('max-results');             // 0 - 50, default: 5
+        const outpurDir = getInput('output-directory');         // default: 'docs'
 
         const currentPlaylists = await getPlaylists(channelId, key, playlistParts, maxResults);
         let previousPlaylistsData;
@@ -72,6 +73,19 @@ async function workflow() {
     } catch (error) {
         core.setFailed(error.message);
     }
+}
+
+function getInput(fieldName) {
+    let result;
+    let envFieldName = fieldName.replace('-', '_').toUpperCase();
+
+    if (process.env[envFieldName]) {
+        result = process.env[envFieldName];
+    } else {
+        result = core.getInput(fieldName);
+    }
+
+    return result;
 }
 
 workflow();
