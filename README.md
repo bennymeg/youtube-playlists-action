@@ -20,9 +20,13 @@ This action fetch's all youtube channel playlists with their corresponding video
 
 **Optional** Youtube channel playlist items parts to retrive. Default=all.
 
-### `maxResults`
+### `max-results`
 
 **Optional** Query max results. Default=20.
+
+### `output-directory`
+
+**Optional** Resources output directory. Default='docs'.
 
 ## Example usage
 
