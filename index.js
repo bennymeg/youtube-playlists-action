@@ -16,7 +16,7 @@ async function workflow() {
         const outpurDir = core.getInput('output-directory');         // default: 'docs'
 
         const currentPlaylists = await getPlaylists(channelId, key, playlistParts, maxResults);
-        let previousPlaylists;
+        let previousPlaylistsData;
 
         if (currentPlaylists && currentPlaylists.data.items.length > 0) {
             // read previous playlists toc
@@ -24,17 +24,17 @@ async function workflow() {
                 .then(toc => prevPlaylists = toc)
                 .catch(error => console.error(error));
 
-            if (currentPlaylists !== previousPlaylists) {
+            if (currentPlaylists.data !== previousPlaylistsData) {
                 // update playlists toc to file
                 await writeFile(join(outpurDir, 'toc.json'), JSON.stringify(currentPlaylists.data))
-                    .then(console.log(`Playlists table of contents file has been ${prevPlaylists ? 'updated' : 'added'}!`))
+                    .then(console.log(`Playlists table of contents file has been ${previousPlaylistsData ? 'updated' : 'added'}!`))
                     .catch(error => console.error(error));
 
-                const previousPlaylistsIds = prevPlaylists.data.items.map(playlist => playlist.id);
+                const previousPlaylistsIds = previousPlaylistsData.items.map(playlist => playlist.id);
                 const currentPlaylistsIds = currentPlaylists.data.items.map(playlist => playlist.id);
 
                 const addedPlaylistsIds = currentPlaylistsIds.filter(id => previousPlaylistsIds.includes(id));
-                const updatedPlaylistsIds = previousPlaylistsIds.filter(id => currentPlaylistsIds.includes(id));
+                const updatedPlaylistsIds = PlaylistsIds.filter(id => currentPlaylistsIds.includes(id));
                 const removedPlaylistsIds = previousPlaylistsIds.filter(id => currentPlaylistsIds.includes(id));
 
                 addedPlaylistsIds.forEach(async (id) => {
