@@ -22,21 +22,25 @@ async function workflow() {
         if (currentPlaylists && currentPlaylists.data.items.length > 0) {
             // read previous playlists toc
             await readFile(join(outpurDir, 'toc.json'))
-                .then(toc => prevPlaylists = toc)
+                .then(toc => previousPlaylistsData = JSON.parse(toc))
                 .catch(error => console.error(error));
 
-            if (currentPlaylists.data !== previousPlaylistsData) {
+            if (!previousPlaylistsData || JSON.stringify(currentPlaylists.data.items) !== JSON.stringify(previousPlaylistsData.items)) {
                 // update playlists toc to file
                 await writeFile(join(outpurDir, 'toc.json'), JSON.stringify(currentPlaylists.data))
                     .then(console.log(`Playlists table of contents file has been ${previousPlaylistsData ? 'updated' : 'added'}!`))
                     .catch(error => console.error(error));
 
+                if (!previousPlaylistsData) {
+                    previousPlaylistsData = currentPlaylists.data;
+                }
+
                 const previousPlaylistsIds = previousPlaylistsData.items.map(playlist => playlist.id);
                 const currentPlaylistsIds = currentPlaylists.data.items.map(playlist => playlist.id);
 
-                const addedPlaylistsIds = currentPlaylistsIds.filter(id => previousPlaylistsIds.includes(id));
-                const updatedPlaylistsIds = PlaylistsIds.filter(id => currentPlaylistsIds.includes(id));
-                const removedPlaylistsIds = previousPlaylistsIds.filter(id => currentPlaylistsIds.includes(id));
+                const addedPlaylistsIds = currentPlaylistsIds.filter(id => !previousPlaylistsIds.includes(id));
+                const updatedPlaylistsIds = currentPlaylistsIds.filter(id => previousPlaylistsIds.includes(id));
+                const removedPlaylistsIds = previousPlaylistsIds.filter(id => !currentPlaylistsIds.includes(id));
 
                 addedPlaylistsIds.forEach(async (id) => {
                     const items = await getPlaylistItems(id, key, videoParts, maxResults);
@@ -62,12 +66,12 @@ async function workflow() {
 
                 removedPlaylistsIds.forEach(async (id) => {
                     // remove playlist items file
-                    if (items) {
-                        removeFile(join(outpurDir, `${id}.json`))
-                            .then(console.log(`${id} playlist file has been removed!`))
-                            .catch(error => console.error(error));
-                    }
+                    removeFile(join(outpurDir, `${id}.json`))
+                        .then(console.log(`${id} playlist file has been removed!`))
+                        .catch(error => console.error(error));
                 });
+            } else {
+                console.log(`Playlists table of contents file is up-to-date!`);
             }
         }
     } catch (error) {
